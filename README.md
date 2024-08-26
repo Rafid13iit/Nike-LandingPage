@@ -1,4 +1,4 @@
-<img src="https://github.com/Rafid13iit/Nike-LandingPage/blob/main/public/cover.png?raw=true" width="750" height="400" align="center">
+<img src="https://github.com/Rafid13iit/Nike-LandingPage/blob/master/public/cover.png?raw=true" width="750" height="400" align="center">
 
 # Nike Landing Page
 
