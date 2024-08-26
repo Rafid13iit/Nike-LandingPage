@@ -1,11 +1,38 @@
+import React from 'react';
+import { motion, useAnimation } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
 import { arrowRight } from "../assets/icons";
 import { offer } from "../assets/images";
 import Button from "../components/Button";
+import { fadeIn, slideAnimation } from '../config/motion';
 
 const SpecialOffer = () => {
+  const controls = useAnimation();
+  const [ref, inView] = useInView({
+    triggerOnce: false,
+    threshold: 0.1,
+  });
+
+  React.useEffect(() => {
+    if (inView) {
+      controls.start('animate');
+    } else {
+      controls.start('initial');
+    }
+  }, [controls, inView]);
+
   return (
-    <section className='flex justify-between items-center max-xl:flex-col-reverse gap-10 max-container'>
-      <div className='flex-1'>
+    <motion.section
+      ref={ref}
+      className='flex justify-between items-center max-xl:flex-col-reverse gap-10 max-container'
+      initial="initial"
+      animate={controls}
+      variants={fadeIn(0.8)} // Apply a fade-in effect to the section
+    >
+      <motion.div 
+        className='flex-1'
+        variants={slideAnimation('left', 0.9, 0.2)} // Animation for the image
+      >
         <img
           src={offer}
           alt='Shoe Promotion'
@@ -13,8 +40,9 @@ const SpecialOffer = () => {
           height={687}
           className='object-contain w-full'
         />
-      </div>
-      <div className='flex flex-1 flex-col'>
+      </motion.div>
+
+      <motion.div className='flex flex-1 flex-col' variants={slideAnimation('right', 0.9, 0.4)}>
         <h2 className='text-4xl font-palanquin font-bold'>
           <span className='text-coral-red'>Special </span>
           Offer
@@ -38,8 +66,8 @@ const SpecialOffer = () => {
             textColor='text-slate-gray'
           />
         </div>
-      </div>
-    </section>
+      </motion.div>
+    </motion.section>
   );
 };
 

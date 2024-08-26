@@ -1,11 +1,35 @@
+import React from 'react';
+import { motion, useAnimation } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
 import { copyrightSign } from "../assets/icons";
 import { footerLogo } from "../assets/images";
 import { footerLinks, socialMedia } from "../constants";
+import { slideAnimation } from '../config/motion';
 
 const Footer = () => {
+  const controls = useAnimation();
+  const [ref, inView] = useInView({
+    triggerOnce: false,
+    threshold: 0.1,
+  });
+
+  React.useEffect(() => {
+    if (inView) {
+      controls.start('animate');
+    } else {
+      controls.start('initial');
+    }
+  }, [controls, inView]);
+
   return (
-    <footer className='max-container'>
-      <div className='flex justify-between items-start gap-20 flex-wrap max-lg:flex-col'>
+    <motion.footer
+      ref={ref}
+      className='max-container'
+      initial="initial"
+      animate={controls}
+      variants={slideAnimation('up', 0.8, 0.2)} // Apply a slide-up effect to the footer
+    >
+      <motion.div className='flex justify-between items-start gap-20 flex-wrap max-lg:flex-col' variants={slideAnimation('up', 0.9, 0.2)}>
         <div className='flex flex-col items-start'>
           <a href='/'>
             <img
@@ -32,7 +56,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className='flex flex-1 justify-between lg:gap-10 gap-20 flex-wrap'>
+        <motion.div className='flex flex-1 justify-between lg:gap-10 gap-20 flex-wrap' variants={slideAnimation('up', 0.9, 0.4)}>
           {footerLinks.map((section) => (
             <div key={section.title}>
               <h4 className='font-montserrat text-2xl leading-normal font-medium mb-6 text-white'>
@@ -50,10 +74,10 @@ const Footer = () => {
               </ul>
             </div>
           ))}
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
-      <div className='flex justify-between text-white-400 mt-24 max-sm:flex-col max-sm:items-center'>
+      <motion.div className='flex justify-between text-white-400 mt-24 max-sm:flex-col max-sm:items-center' variants={slideAnimation('up', 0.9, 0.6)}>
         <div className='flex flex-1 justify-start items-center gap-2 font-montserrat cursor-pointer'>
           <img
             src={copyrightSign}
@@ -65,8 +89,8 @@ const Footer = () => {
           <p>Copyright. All rights reserved.</p>
         </div>
         <p className='font-montserrat cursor-pointer'>Terms & Conditions</p>
-      </div>
-    </footer>
+      </motion.div>
+    </motion.footer>
   );
 };
 

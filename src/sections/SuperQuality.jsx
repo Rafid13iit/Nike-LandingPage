@@ -1,13 +1,35 @@
+import React from 'react';
+import { motion, useAnimation } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
 import { shoe8 } from "../assets/images";
 import Button from "../components/Button";
+import { fadeIn, slideAnimation } from '../config/motion';
 
 const SuperQuality = () => {
+  const controls = useAnimation();
+  const [ref, inView] = useInView({
+    triggerOnce: false, // Keep this false to trigger every time it's in view
+    threshold: 0.1, // Adjust if needed to 0.5 or 0.3 based on your testing
+  });
+
+  React.useEffect(() => {
+    if (inView) {
+      controls.start('animate');
+    } else {
+      controls.start('initial'); // Reset to initial state if out of view
+    }
+  }, [controls, inView]);
+
   return (
-    <section
+    <motion.section
       id='about-us'
+      ref={ref}
       className='flex justify-between items-center max-lg:flex-col gap-10 w-full max-container'
+      initial="initial"
+      animate={controls}
+      variants={fadeIn(0.8)}  // Applying fade-in effect to the whole section
     >
-      <div className='flex flex-1 flex-col'>
+      <motion.div className='flex flex-1 flex-col' variants={slideAnimation('left', 0.9, 0.2)}>
         <h2 className='font-palanquin capitalize text-4xl lg:max-w-lg font-bold'>
           We Provide You
           <span className='text-coral-red'> Super </span>
@@ -24,9 +46,12 @@ const SuperQuality = () => {
         <div className='mt-11'>
           <Button label='View details' />
         </div>
-      </div>
+      </motion.div>
 
-      <div className='flex-1 flex justify-center items-center'>
+      <motion.div 
+        className='flex-1 flex justify-center items-center'
+        variants={slideAnimation('right', 0.9, 0.4)} // Animation for the image
+      >
         <img
           src={shoe8}
           alt='product detail'
@@ -34,8 +59,8 @@ const SuperQuality = () => {
           height={522}
           className='object-contain'
         />
-      </div>
-    </section>
+      </motion.div>
+    </motion.section>
   );
 };
 
